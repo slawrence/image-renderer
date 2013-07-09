@@ -1,0 +1,79 @@
+<html>
+<head>
+    <style>
+        canvas, img {
+            border: 5px solid #ddd;
+            image-rendering: optimizeSpeed;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: optimize-contrast;
+            -ms-interpolation-mode: bicubic;
+        }
+    </style>
+    <script src='//code.jquery.com/jquery-1.10.1.min.js'></script>
+</head>
+
+<body>
+
+<p>
+    <label>width: </label><input id="width" type="text"/>
+    <label>height: </label><input id="height" type="text"/>
+    <select id="name">
+        <option value="images/HIGH_2320x3408.png">Text</option>
+        <option value="https://patentimages.storage.googleapis.com/EP0548928A2/imgf0001.png">Image</option>
+    </select>
+    <a id="inc" href="#">+</a>
+    <a id="dec" href="#">-</a>
+    <label>url: </label><input id="url" type="text">
+</p>
+
+<canvas id="drawing" width=1000 height=1000></canvas>
+
+<script>
+    var img = new Image(),
+        w,
+        h,
+        canvas = document.getElementById("drawing"),
+        ctx = canvas.getContext("2d");
+
+    img.onload = function () {
+        change();
+    };
+    img.src = $("#name option:first").val();
+
+    var change = function (width, height) {
+        w = width || w || img.width;
+        h = height || h || img.height;
+        $('#width').val(w);
+        $('#height').val(h);
+        canvas.width = w;
+        canvas.height = h;
+        ctx.drawImage(img, 0, 0, w, h);
+    };
+
+
+    $('#width').change(function () {
+        change($(this).val());
+    });
+    $('#height').change(function () {
+        change(undefined, $(this).val());
+    });
+    $('#name').change(function (el) {
+        w = h = undefined; //reset
+        img.src = $(this).val();
+    });
+    $('#inc').click(function (el) {
+        change(1.1*w, 1.1*h);
+    });
+    $('#dec').click(function (el) {
+        change(.9*w, .9*h);
+    });
+    $('#url').change(function () {
+        img.src = $(this).val();
+    });
+
+</script>
+
+</body>
+
+</html>
